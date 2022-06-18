@@ -16,7 +16,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             CompanyProfileSeeder::class,
-            UserProfileSeeder::class
+            UserProfileSeeder::class,
+            CategorySeeder::class,
+            JobSeeder::class,
+            JobCategorySeeder::class
         ]);
     }
 }
