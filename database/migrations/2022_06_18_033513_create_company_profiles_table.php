@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePersonalAccessTokensTable extends Migration
+class CreateCompanyProfilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreatePersonalAccessTokensTable extends Migration
      */
     public function up()
     {
-        Schema::create('personal_access_tokens', function (Blueprint $table) {
+        Schema::create('company_profiles', function (Blueprint $table) {
             $table->id();
-            $table->morphs('tokenable');
+            $table->bigInteger('user_id')->unsigned();
             $table->string('name');
-            $table->string('token', 64)->unique();
-            $table->text('abilities')->nullable();
-            $table->timestamp('last_used_at')->nullable();
+            $table->string('description');
+            $table->string('city');
+            $table->string('province');
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->timestamp('created_at')->useCurrent();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -32,6 +34,6 @@ class CreatePersonalAccessTokensTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('personal_access_tokens');
+        Schema::dropIfExists('company_profiles');
     }
 }
