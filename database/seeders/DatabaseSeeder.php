@@ -19,7 +19,14 @@ class DatabaseSeeder extends Seeder
             UserProfileSeeder::class,
             CategorySeeder::class,
             JobSeeder::class,
-            JobCategorySeeder::class
+            JobCategorySeeder::class,
+            CourseSeeder::class,
+            EnrollmentSeeder::class,
+            SkillAssesmentSeeder::class,
+            UserDocumentSeeder::class,
+            JobApplicationSeeder::class,
+            ApplicationCourseSeeder::class,
+            ApplicationDocumentSeeder::class
         ]);
     }
 }
