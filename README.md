@@ -25,3 +25,4 @@
 - Laravel 8 : https://laravel.com/docs/8.x 
 - CRUD + Auth : https://www.codecheef.org/article/laravel-6-rest-api-with-jwt-authentication-with-crud 
 - Relationship : https://appdividend.com/2022/01/21/laravel-many-to-many-relationship/ 
+
