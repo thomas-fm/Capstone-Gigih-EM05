@@ -47,7 +47,8 @@
 
                 <div class="flex items-center justify-end mt-4">
                     @if (Route::has('register'))
-                        Don't have account, &nbsp;
+                        <a class="text-sm text-gray-600 hover:text-gray-900">
+                        Don't have account? &nbsp;
                         <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('register') }}">
                             {{ __('Register') }}
                         </a>
