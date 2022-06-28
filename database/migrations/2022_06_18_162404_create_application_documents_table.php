@@ -18,8 +18,8 @@ class CreateApplicationDocumentsTable extends Migration
             $table->bigInteger('application_id')->unsigned();
             $table->bigInteger('document_id')->unsigned();
 
-            $table->foreign('application_id')->references('id')->on('job_applications');
-            $table->foreign('document_id')->references('id')->on('user_documents');
+            $table->foreign('application_id')->references('id')->on('job_applications')->onDelete('cascade');;
+            $table->foreign('document_id')->references('id')->on('user_documents')->onDelete('cascade');;
         });
     }
 

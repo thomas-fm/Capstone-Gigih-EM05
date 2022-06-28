@@ -18,8 +18,8 @@ class CreateJobCategoriesTable extends Migration
             $table->bigInteger('job_id')->unsigned();
             $table->bigInteger('category_id')->unsigned();
 
-            $table->foreign('job_id')->references('id')->on('jobs');
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 
