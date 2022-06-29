@@ -21,6 +21,7 @@ class CreateJobApplicationsTable extends Migration
             $table->enum('status', ['SUBMITTED', 'ON_REVIEW', 'ACCEPTED', 'REJECTED'])->default('SUBMITTED');
 
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
             $table->foreign('user_profile_id')->references('id')->on('user_profiles')->onDelete('cascade');;
             $table->foreign('job_id')->references('id')->on('jobs')->onDelete('cascade');

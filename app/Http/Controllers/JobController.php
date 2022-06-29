@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\CompanyProfile;
 use Validator;
-use App\Models\Course;
 use App\Models\Category;
 use App\Models\Job;
-use Illuminate\Support\Facades\Log;
 use Helper;
 
 class JobController extends Controller
@@ -18,7 +16,7 @@ class JobController extends Controller
     protected $company_profile;
     public function __construct()
     {
-        // TODO: Change this with authorization
+        // TODO: Change this with middleware
         $this->user = User::find(3);
         $this->company_profile = CompanyProfile::where('user_id', $this->user->id)->first();
     }
@@ -27,7 +25,7 @@ class JobController extends Controller
     {
         if (!isset($this->company_profile))
         {
-            return Helper::ErrorResponse("Sorry, you need to complete your profile first", 400);
+            return Helper::ErrorResponse("Sorry, you need to complete your profile first", 403);
         }
     }
 
@@ -44,7 +42,7 @@ class JobController extends Controller
             $jobs[$index]['categories'] = $categories;
         }
 
-        return Helper::SuccessResponse(true, 'success', $jobs);
+        return Helper::SuccessResponse(true, $jobs, 'success', 200);
     }
 
     public function fetch_job_by_id(Request $request)
@@ -68,7 +66,7 @@ class JobController extends Controller
             $job['categories'] = $categories;
         }
 
-        return Helper::SuccessResponse(true, 'success', $job);
+        return Helper::SuccessResponse(true, $job, 'success', 200);
     }
 
     public function create_job(Request $request)
@@ -86,13 +84,14 @@ class JobController extends Controller
             'minSalary' => ['integer', 'gt:0'],
             'maxSalary' => ['integer', 'gt:0'],
             'expired' => ['required', 'string'],
-            'categories' => ['required']
+            'categories' => ['required'],
+            'courseRequirement' => ['required', 'boolean']
         ]);
 
         if($validator->fails())
         {
             error_log($validator->errors());
-            return Helper::ErrorResponse("Valudation failed", 400);
+            return Helper::ErrorResponse("Validation failed", 400);
         }
 
         // check if category exist
@@ -126,7 +125,7 @@ class JobController extends Controller
         $categories = $job->categories()->get(['categories.id', 'categories.name']);
         $job['categories'] = $categories;
 
-        return Helper::SuccessResponse(true, "success", $job);
+        return Helper::SuccessResponse(true, $job, "success", 200);
     }
     public function update_active_status(Request $request)
     {
@@ -154,7 +153,7 @@ class JobController extends Controller
         $categories = $job->categories()->get(['categories.id', 'categories.name']);
         $job['categories'] = $categories;
 
-        return Helper::SuccessResponse(true, "success", $job);
+        return Helper::SuccessResponse(true, $job, "success", 200);
     }
     public function delete_jobs(Request $request)
     {
@@ -173,7 +172,7 @@ class JobController extends Controller
 
         $deleted = $this->company_profile->jobs()->where('id', $input['job_id'])->delete();
 
-        if ($deleted) return Helper::SuccessResponse(true, "success", null);
+        if ($deleted) return Helper::SuccessResponse(true, null, "success", 204);
         return Helper::ErrorResponse('Data not found', 404);
     }
 }

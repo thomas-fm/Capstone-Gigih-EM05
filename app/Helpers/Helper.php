@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 class Helper
 {
-    public static function SuccessResponse(bool $success, string $message, $data)
+    public static function SuccessResponse(bool $success, $data, string $message, int $code)
     {
         return response()->json([
             "success" => true,
@@ -14,7 +14,6 @@ class Helper
             "data" => $data
         ]);
     }
-
 
     public static function ErrorResponse(string $message, int $code)
     {
