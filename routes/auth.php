@@ -8,6 +8,8 @@ use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -32,6 +34,7 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
                 ->name('password.update');
+                
 });
 
 Route::middleware('auth')->group(function () {
@@ -48,6 +51,16 @@ Route::middleware('auth')->group(function () {
 
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
                 ->name('password.confirm');
+    Route::get('change-password', [UserController::class, 'edit'])
+                ->name('password.edit');
+    Route::patch('change-password', [UserController::class, 'update'])
+                ->name('password.update');
+                
+    Route::get('edit-profile', [UserProfileController::class, 'edit'])
+                ->name('profile.edit');
+    Route::post('edit-profile', [UserProfileController::class, 'store'])
+                ->name('profile.store');
+                
 
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 

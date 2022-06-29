@@ -22,6 +22,7 @@ class CreateUserProfilesTable extends Migration
             $table->string('province'); // province
             $table->string('email');
             $table->string('phone');
+            $table->string('photo')->nullable();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->timestamp('created_at')->useCurrent();
 
