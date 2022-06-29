@@ -32,7 +32,7 @@ class CreateJobsTable extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->timestamp('created_at')->useCurrent();
 
-            $table->foreign('company_profile_id')->references('id')->on('company_profiles');
+            $table->foreign('company_profile_id')->references('id')->on('company_profiles')->onDelete('cascade');
         });
     }
 

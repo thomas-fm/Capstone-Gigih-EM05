@@ -27,8 +27,8 @@ class CreateEnrollmentsTable extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->timestamp('created_at')->useCurrent();
 
-            $table->foreign('user_profile_id')->references('id')->on('user_profiles');
-            $table->foreign('course_id')->references('id')->on('courses');
+            $table->foreign('user_profile_id')->references('id')->on('user_profiles')->onDelete('cascade');;
+            $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');;
         });
     }
 
