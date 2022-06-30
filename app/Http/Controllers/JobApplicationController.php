@@ -65,7 +65,7 @@ class JobApplicationController extends Controller
         if($validator->fails())
         {
             error_log($validator->errors());
-            return Helper::ErrorResponse("Validation failed", Response::HTTP_BAD_REQUEST);
+            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
         $application = JobApplication::find($input["application_id"]);
@@ -90,7 +90,7 @@ class JobApplicationController extends Controller
 
         if($validator->fails())
         {
-            return Helper::ErrorResponse("Validation failed", Response::HTTP_BAD_REQUEST);
+            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
         $job_id = $request->query('job_id');
