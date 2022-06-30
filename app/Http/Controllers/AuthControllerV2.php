@@ -70,13 +70,13 @@ class AuthControllerV2 extends Controller
             return Helper::ErrorResponse('Could not create token', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
- 		return Helper::SuccessResponse(true, ['token' => $token], 'Token created successfully', Response::HTTP_CREATED);
+ 		return Helper::SuccessResponse(true, ['access_token' => $token], 'Token created successfully', Response::HTTP_CREATED);
     }
 
     public function logout(Request $request)
     {
-        $validator = Validator::make($request->only('token'), [
-            'token' => 'required'
+        $validator = Validator::make($request->only('access_token'), [
+            'access_token' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -95,7 +95,7 @@ class AuthControllerV2 extends Controller
     public function get_user(Request $request)
     {
         $this->validate($request, [
-            'token' => 'required'
+            'access_token' => 'required'
         ]);
 
         $user = JWTAuth::authenticate($request->token);
