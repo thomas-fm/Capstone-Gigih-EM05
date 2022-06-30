@@ -9,6 +9,8 @@ use Validator;
 use App\Models\Category;
 use App\Models\Job;
 use Helper;
+use JWTAuth;
+use Symfony\Component\HttpFoundation\Response;
 
 class JobController extends Controller
 {
@@ -16,8 +18,7 @@ class JobController extends Controller
     protected $company_profile;
     public function __construct()
     {
-        // TODO: Change this with middleware
-        $this->user = User::find(3);
+        $this->user = JWTAuth::parseToken()->authenticate();
         $this->company_profile = CompanyProfile::where('user_id', $this->user->id)->first();
     }
 
@@ -25,7 +26,7 @@ class JobController extends Controller
     {
         if (!isset($this->company_profile))
         {
-            return Helper::ErrorResponse("Sorry, you need to complete your profile first", 403);
+            return Helper::ErrorResponse("Sorry, you need to complete your profile first", Response::HTTP_FORBIDDEN);
         }
     }
 
@@ -42,7 +43,7 @@ class JobController extends Controller
             $jobs[$index]['categories'] = $categories;
         }
 
-        return Helper::SuccessResponse(true, $jobs, 'success', 200);
+        return Helper::SuccessResponse(true, $jobs, 'success', Response::HTTP_OK);
     }
 
     public function fetch_job_by_id(Request $request)
@@ -52,7 +53,7 @@ class JobController extends Controller
         // validate request
         $job_id = $request->route('jobId');
 
-        if (!isset($job_id)) return Helper::ErrorResponse("Required job id param", 400);
+        if (!isset($job_id)) return Helper::ErrorResponse("Required job id param", Response::HTTP_BAD_REQUEST);
 
         // check if company profile exist
         $job = $this->company_profile->jobs()
@@ -66,7 +67,7 @@ class JobController extends Controller
             $job['categories'] = $categories;
         }
 
-        return Helper::SuccessResponse(true, $job, 'success', 200);
+        return Helper::SuccessResponse(true, $job, 'success', Response::HTTP_OK);
     }
 
     public function create_job(Request $request)
@@ -91,7 +92,7 @@ class JobController extends Controller
         if($validator->fails())
         {
             error_log($validator->errors());
-            return Helper::ErrorResponse("Validation failed", 400);
+            return Helper::ErrorResponse("Validation failed", Response::HTTP_BAD_REQUEST);
         }
 
         // check if category exist
@@ -125,7 +126,7 @@ class JobController extends Controller
         $categories = $job->categories()->get(['categories.id', 'categories.name']);
         $job['categories'] = $categories;
 
-        return Helper::SuccessResponse(true, $job, "success", 200);
+        return Helper::SuccessResponse(true, $job, "success", Response::HTTP_CREATED);
     }
     public function update_active_status(Request $request)
     {
@@ -140,12 +141,12 @@ class JobController extends Controller
         if($validator->fails())
         {
             error_log($validator->errors());
-            return Helper::ErrorResponse("Validation failed", 400);
+            return Helper::ErrorResponse("Validation failed", Response::HTTP_BAD_REQUEST);
         }
 
         $job = $this->company_profile->jobs()->find($input['job_id']);
 
-        if (is_null($job)) return Helper::ErrorResponse("Data not found", 404);
+        if (is_null($job)) return Helper::ErrorResponse("Data not found", Response::HTTP_BAD_REQUEST);
 
         $job->active = $input['active'];
         $job->save();
@@ -153,7 +154,7 @@ class JobController extends Controller
         $categories = $job->categories()->get(['categories.id', 'categories.name']);
         $job['categories'] = $categories;
 
-        return Helper::SuccessResponse(true, $job, "success", 200);
+        return Helper::SuccessResponse(true, $job, "success", Response::HTTP_OK);
     }
     public function delete_jobs(Request $request)
     {
@@ -167,12 +168,12 @@ class JobController extends Controller
         if($validator->fails())
         {
             error_log($validator->errors());
-            return Helper::ErrorResponse("Validation failed", 400);
+            return Helper::ErrorResponse("Validation failed", Response::HTTP_BAD_REQUEST);
         }
 
         $deleted = $this->company_profile->jobs()->where('id', $input['job_id'])->delete();
 
-        if ($deleted) return Helper::SuccessResponse(true, null, "success", 204);
-        return Helper::ErrorResponse('Data not found', 404);
+        if ($deleted) return Helper::SuccessResponse(true, null, "success", Response::HTTP_ACCEPTED);
+        return Helper::ErrorResponse('Data not found', Response::HTTP_BAD_REQUEST);
     }
 }

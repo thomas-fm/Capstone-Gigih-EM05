@@ -6,14 +6,15 @@
 - MySQL server
 
 ## How to run
-### First run
+### Installation
 - Clone repository
 - Go to project directory
-- Run `composer install` to generate dependencies
+- Run `composer install` or `compose update` to generate dependencies
 - Generate key `php artisan key:generate`
 - Copy `env.example` file to `env`
 - Change database configuration
 - Create local database
+- Generate JWT key with `php artisan jwt:secret` or copy from `env.example`
 ### Run local
 - Go to project directory
 - Run migrations and seeder if needed

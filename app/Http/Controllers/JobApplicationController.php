@@ -7,7 +7,9 @@ use App\Models\User;
 use App\Models\CompanyProfile;
 use Helper;
 use Validator;
+use JWTAuth;
 use App\Models\JobApplication;
+use Symfony\Component\HttpFoundation\Response;
 
 class JobApplicationController extends Controller
 {
@@ -15,8 +17,7 @@ class JobApplicationController extends Controller
     protected $company_profile;
     public function __construct()
     {
-        // TODO: Change this with middleware
-        $this->user = User::find(3);
+        $this->user = JWTAuth::parseToken()->authenticate();
         $this->company_profile = CompanyProfile::where('user_id', $this->user->id)->first();
     }
     //
@@ -24,7 +25,7 @@ class JobApplicationController extends Controller
     {
         if (!isset($this->company_profile))
         {
-            return Helper::ErrorResponse("Sorry, you need to complete your profile first", 403);
+            return Helper::ErrorResponse("Sorry, you need to complete your profile first", Response::HTTP_FORBIDDEN);
         }
     }
 
@@ -47,7 +48,7 @@ class JobApplicationController extends Controller
             $job_applicants[] = $applicants;
         }
 
-        return Helper::SuccessResponse(true, $job_applicants, 'success', 200);
+        return Helper::SuccessResponse(true, $job_applicants, 'success', Response::HTTP_OK);
     }
 
     public function update_status(Request $request)
@@ -64,17 +65,17 @@ class JobApplicationController extends Controller
         if($validator->fails())
         {
             error_log($validator->errors());
-            return Helper::ErrorResponse("Validation failed", 400);
+            return Helper::ErrorResponse("Validation failed", Response::HTTP_BAD_REQUEST);
         }
 
         $application = JobApplication::find($input["application_id"]);
 
-        if (is_null($application)) return Helper::ErrorResponse("Data not found", 404);
+        if (is_null($application)) return Helper::ErrorResponse("Data not found", Response::HTTP_NOT_FOUND);
 
         $application->status = $input['status'];
         $application->save();
 
-        return Helper::SuccessResponse(true, $application, "success", 200);
+        return Helper::SuccessResponse(true, $application, "Updated succesfully", Response::HTTP_OK);
     }
 
     public function fetch_applicants_by_filter(Request $request)
@@ -89,7 +90,7 @@ class JobApplicationController extends Controller
 
         if($validator->fails())
         {
-            return Helper::ErrorResponse("Validation failed", 400);
+            return Helper::ErrorResponse("Validation failed", Response::HTTP_BAD_REQUEST);
         }
 
         $job_id = $request->query('job_id');
@@ -108,6 +109,6 @@ class JobApplicationController extends Controller
             $job_applicants = JobApplication::where("status", $status)->get();
         }
 
-        return Helper::SuccessResponse(true, $job_applicants, 'success', 200);
+        return Helper::SuccessResponse(true, $job_applicants, 'success', Response::HTTP_OK);
     }
 }
