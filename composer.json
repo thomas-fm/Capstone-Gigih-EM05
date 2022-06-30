@@ -12,6 +12,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.3",
+        "nao-pon/flysystem-google-drive": "~1.1",
         "nesbot/carbon": "^2.58",
         "tymon/jwt-auth": "^1.0"
     },
