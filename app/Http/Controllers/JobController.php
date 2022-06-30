@@ -22,7 +22,7 @@ class JobController extends Controller
         $this->company_profile = CompanyProfile::where('user_id', $this->user->id)->first();
     }
 
-    public function validate_company()
+    public function validateCompany()
     {
         if (!isset($this->company_profile))
         {
@@ -30,9 +30,9 @@ class JobController extends Controller
         }
     }
 
-    public function fetch_all_jobs(Request $request)
+    public function fetchAllJobs(Request $request)
     {
-        $this->validate_company();
+        $this->validateCompany();
 
         $jobs = $this->company_profile->jobs;
 
@@ -46,9 +46,9 @@ class JobController extends Controller
         return Helper::SuccessResponse(true, $jobs, 'success', Response::HTTP_OK);
     }
 
-    public function fetch_job_by_id(Request $request)
+    public function fetchJobById(Request $request)
     {
-        $this->validate_company();
+        $this->validateCompany();
 
         // validate request
         $job_id = $request->route('jobId');
@@ -70,9 +70,9 @@ class JobController extends Controller
         return Helper::SuccessResponse(true, $job, 'success', Response::HTTP_OK);
     }
 
-    public function create_job(Request $request)
+    public function createJob(Request $request)
     {
-        $this->validate_company();
+        $this->validateCompany();
 
         $input = $request->all();
         $validator = Validator::make($input, [
@@ -128,9 +128,9 @@ class JobController extends Controller
 
         return Helper::SuccessResponse(true, $job, "success", Response::HTTP_CREATED);
     }
-    public function update_active_status(Request $request)
+    public function updateActiveStatus(Request $request)
     {
-        $this->validate_company();
+        $this->validateCompany();
 
         $input = $request->all();
         $validator = Validator::make($input, [
@@ -156,9 +156,9 @@ class JobController extends Controller
 
         return Helper::SuccessResponse(true, $job, "success", Response::HTTP_OK);
     }
-    public function delete_jobs(Request $request)
+    public function deleteJobs(Request $request)
     {
-        $this->validate_company();
+        $this->validateCompany();
 
         $input = $request->all();
         $validator = Validator::make($input, [
