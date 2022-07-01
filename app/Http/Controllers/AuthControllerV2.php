@@ -15,17 +15,18 @@ class AuthControllerV2 extends Controller
     public function register(Request $request)
     {
     	//Validate data
-        $data = $request->only('username', 'email', 'password', 'role');
+        $data = $request->only('username', 'email', 'password', 'role', 'confirm_password');
         $validator = Validator::make($data, [
-            'username' => 'required|string',
+            'username' => 'required|string|unique:users',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6|max:50',
+            'confirm_password' => 'required|string|same:password',
             'role' => 'required|in:COMPANY,USER,company,user'
         ]);
 
         //Send failed response if request is not valid
         if ($validator->fails()) {
-            return Helper::ErrorResponse('Invalid request', Response::HTTP_BAD_REQUEST);
+            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
         //Request is valid, create new user
@@ -41,11 +42,11 @@ class AuthControllerV2 extends Controller
 
     public function authenticate(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $input = $request->only('username', 'password');
 
         //valid credential
-        $validator = Validator::make($credentials, [
-            'email' => 'required|email',
+        $validator = Validator::make($input, [
+            'username' => 'required|string',
             'password' => 'required|string|min:6|max:50'
         ]);
 
@@ -54,9 +55,14 @@ class AuthControllerV2 extends Controller
             return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
+        $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         //Request is validated
         //Crean token
         try {
+            $credentials = array();
+            $credentials[$fieldType] = $input['username'];
+            $credentials['password'] = $input['password'];
+
             if (!$token = JWTAuth::attempt($credentials)) {
                 return Helper::ErrorResponse('Login credentials are invalid', Response::HTTP_BAD_REQUEST);
             }
@@ -64,13 +70,13 @@ class AuthControllerV2 extends Controller
             return Helper::ErrorResponse('Could not create token', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
- 		return Helper::SuccessResponse(true, ['token' => $token], 'Token created successfully', Response::HTTP_CREATED);
+ 		return Helper::SuccessResponse(true, ['access_token' => $token], 'Token created successfully', Response::HTTP_CREATED);
     }
 
     public function logout(Request $request)
     {
-        $validator = Validator::make($request->only('token'), [
-            'token' => 'required'
+        $validator = Validator::make($request->only('access_token'), [
+            'access_token' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -89,7 +95,7 @@ class AuthControllerV2 extends Controller
     public function get_user(Request $request)
     {
         $this->validate($request, [
-            'token' => 'required'
+            'access_token' => 'required'
         ]);
 
         $user = JWTAuth::authenticate($request->token);
