@@ -44,6 +44,9 @@ Route::group(['middleware' => ['jwt.verify:COMPANY,company']], function() {
 
 Route::group(['middleware' => ['jwt.verify:USER,user']], function() {
     Route::post('user/document', [UserDocumentController::class, 'addUserDocument']);
+    Route::get('user/document', [UserDocumentController::class, 'fetchUserDocuments']);
+    Route::get('user/document/{document_id}', [UserDocumentController::class, 'fetchUserDocumentById']);
+    Route::delete('user/document/{document_id}', [UserDocumentController::class, 'deleteUserDocumentById']);
 });
 
 

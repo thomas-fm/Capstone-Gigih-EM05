@@ -18,6 +18,8 @@ class CreateUserDocumentsTable extends Migration
             $table->bigInteger('user_profile_id')->unsigned();
             $table->enum('type', ['CV', 'RESUME', 'PORTOFOLIO', 'CERTIFICATE', 'TRANSCRIPT']);
             $table->string('url');
+            $table->boolean('isUploaded')->default(false);
+            $table->string('filename')->nullable();
             $table->timestamp('created_at')->useCurrent();
 
             $table->foreign('user_profile_id')->references('id')->on('user_profiles');
