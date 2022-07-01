@@ -24,4 +24,9 @@ class UserProfile extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function user_documents()
+    {
+        return $this->hasMany(UserDocument::class);
+    }
 }

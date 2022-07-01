@@ -21,7 +21,7 @@ class JobApplicationController extends Controller
         $this->company_profile = CompanyProfile::where('user_id', $this->user->id)->first();
     }
     //
-    public function validate_company()
+    public function validateCompany()
     {
         if (!isset($this->company_profile))
         {
@@ -29,9 +29,9 @@ class JobApplicationController extends Controller
         }
     }
 
-    public function fetch_company_applicants()
+    public function fetchCompanyApplicants()
     {
-        $this->validate_company();
+        $this->validateCompany();
 
         $jobs = $this->company_profile->jobs;
         $job_applicants = array();
@@ -51,9 +51,9 @@ class JobApplicationController extends Controller
         return Helper::SuccessResponse(true, $job_applicants, 'success', Response::HTTP_OK);
     }
 
-    public function update_status(Request $request)
+    public function updateStatus(Request $request)
     {
-        $this->validate_company();
+        $this->validateCompany();
 
         $input = $request->all();
 
@@ -78,9 +78,9 @@ class JobApplicationController extends Controller
         return Helper::SuccessResponse(true, $application, "Updated succesfully", Response::HTTP_OK);
     }
 
-    public function fetch_applicants_by_filter(Request $request)
+    public function fetchApplicantsByFilter(Request $request)
     {
-        $this->validate_company();
+        $this->validateCompany();
 
         $queries = $request->query();
 

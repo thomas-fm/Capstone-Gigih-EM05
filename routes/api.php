@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\AuthControllerV2;
+use App\Http\Controllers\UserDocumentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,16 +31,24 @@ Route::group(['middleware' => ['jwt.verify:ADMIN,USER,COMPANY,admin,user,company
 Route::group(['middleware' => ['jwt.verify:COMPANY,company']], function() {
     Route::get('logout', [ApiController::class, 'logout']);
 
-    Route::get('company/job', [JobController::class, 'fetch_all_jobs']);
-    Route::post('company/job', [JobController::class, 'create_job']);
-    Route::patch('company/job/active-status', [JobController::class, 'update_active_status']);
-    Route::get('company/job/{jobId}/read', [JobController::class, 'fetch_job_by_id']);
-    Route::delete('company/job', [JobController::class, 'delete_jobs']);
+    Route::get('company/job', [JobController::class, 'fetchAllJobs']);
+    Route::post('company/job', [JobController::class, 'createJob']);
+    Route::patch('company/job/active-status', [JobController::class, 'updateActiveStatus']);
+    Route::get('company/job/{jobId}/read', [JobController::class, 'fetchJobById']);
+    Route::delete('company/job', [JobController::class, 'deleteJobs']);
 
-    Route::get('company/job-applicant', [JobApplicationController::class, 'fetch_company_applicants']);
-    Route::patch('company/job-applicant/status', [JobApplicationController::class, 'update_status']);
-    Route::get('company/job-applicant/filter', [JobApplicationController::class, 'fetch_applicants_by_filter']);
+    Route::get('company/job-applicant', [JobApplicationController::class, 'fetchCompanyApplicants']);
+    Route::patch('company/job-applicant/status', [JobApplicationController::class, 'updateStatus']);
+    Route::get('company/job-applicant/filter', [JobApplicationController::class, 'fetchApplicantsByFilter']);
+});
+
+Route::group(['middleware' => ['jwt.verify:USER,user']], function() {
+    Route::post('user/document', [UserDocumentController::class, 'addUserDocument']);
+    Route::get('user/document', [UserDocumentController::class, 'fetchUserDocuments']);
+    Route::get('user/document/{document_id}', [UserDocumentController::class, 'fetchUserDocumentById']);
+    Route::delete('user/document/{document_id}', [UserDocumentController::class, 'deleteUserDocumentById']);
 });
 
 
-// Route::get('company/job', ['middleware' => 'jwt.verify:admin,user,company', 'uses' => 'JobController@fetch_all_jobs', 'as' => 'jobs']);
+
+// Route::get('company/job', ['middleware' => 'jwt.verify:admin,user,company', 'uses' => 'JobController@fetchAllJobs', 'as' => 'jobs']);
