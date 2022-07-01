@@ -92,7 +92,7 @@ class JobController extends Controller
         if($validator->fails())
         {
             error_log($validator->errors());
-            return Helper::ErrorResponse("Validation failed", Response::HTTP_BAD_REQUEST);
+            return Helper::ErrorResponse("Validation failed: ".$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
         // check if category exist
@@ -141,7 +141,7 @@ class JobController extends Controller
         if($validator->fails())
         {
             error_log($validator->errors());
-            return Helper::ErrorResponse("Validation failed", Response::HTTP_BAD_REQUEST);
+            return Helper::ErrorResponse("Validation failed: ".$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
         $job = $this->company_profile->jobs()->find($input['job_id']);
@@ -168,7 +168,7 @@ class JobController extends Controller
         if($validator->fails())
         {
             error_log($validator->errors());
-            return Helper::ErrorResponse("Validation failed", Response::HTTP_BAD_REQUEST);
+            return Helper::ErrorResponse("Validation failed: ".$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
         $deleted = $this->company_profile->jobs()->where('id', $input['job_id'])->delete();

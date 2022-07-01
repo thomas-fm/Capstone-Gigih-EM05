@@ -51,7 +51,7 @@ class AuthControllerV2 extends Controller
 
         //Send failed response if request is not valid
         if ($validator->fails()) {
-            return Helper::ErrorResponse('Invalid request', Response::HTTP_BAD_REQUEST);
+            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
         //Request is validated

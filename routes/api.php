@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\AuthControllerV2;
+use App\Http\Controllers\UserDocumentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -40,6 +41,11 @@ Route::group(['middleware' => ['jwt.verify:COMPANY,company']], function() {
     Route::patch('company/job-applicant/status', [JobApplicationController::class, 'updateStatus']);
     Route::get('company/job-applicant/filter', [JobApplicationController::class, 'fetchApplicantsByFilter']);
 });
+
+Route::group(['middleware' => ['jwt.verify:USER,user']], function() {
+    Route::post('user/document', [UserDocumentController::class, 'addUserDocument']);
+});
+
 
 
 // Route::get('company/job', ['middleware' => 'jwt.verify:admin,user,company', 'uses' => 'JobController@fetchAllJobs', 'as' => 'jobs']);
