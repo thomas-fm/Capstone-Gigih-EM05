@@ -29,24 +29,29 @@ Route::group(['middleware' => ['jwt.verify:ADMIN,USER,COMPANY,admin,user,company
 });
 
 Route::group(['middleware' => ['jwt.verify:COMPANY,company']], function() {
-    Route::get('logout', [ApiController::class, 'logout']);
+    Route::group(['middleware' => ['profile.verify']], function() {
+        Route::get('company/job', [JobController::class, 'fetchAllJobs']);
+        Route::post('company/job', [JobController::class, 'createJob']);
+        Route::patch('company/job/active-status', [JobController::class, 'updateActiveStatus']);
+        Route::get('company/job/{jobId}/read', [JobController::class, 'fetchJobById']);
+        Route::delete('company/job', [JobController::class, 'deleteJobs']);
 
-    Route::get('company/job', [JobController::class, 'fetchAllJobs']);
-    Route::post('company/job', [JobController::class, 'createJob']);
-    Route::patch('company/job/active-status', [JobController::class, 'updateActiveStatus']);
-    Route::get('company/job/{jobId}/read', [JobController::class, 'fetchJobById']);
-    Route::delete('company/job', [JobController::class, 'deleteJobs']);
-
-    Route::get('company/job-applicant', [JobApplicationController::class, 'fetchCompanyApplicants']);
-    Route::patch('company/job-applicant/status', [JobApplicationController::class, 'updateStatus']);
-    Route::get('company/job-applicant/filter', [JobApplicationController::class, 'fetchApplicantsByFilter']);
+        Route::get('company/job-applicant', [JobApplicationController::class, 'fetchCompanyApplicants']);
+        Route::patch('company/job-applicant/status', [JobApplicationController::class, 'updateStatus']);
+        Route::get('company/job-applicant/filter', [JobApplicationController::class, 'fetchApplicantsByFilter']);
+    });
 });
 
 Route::group(['middleware' => ['jwt.verify:USER,user']], function() {
-    Route::post('user/document', [UserDocumentController::class, 'addUserDocument']);
-    Route::get('user/document', [UserDocumentController::class, 'fetchUserDocuments']);
-    Route::get('user/document/{document_id}', [UserDocumentController::class, 'fetchUserDocumentById']);
-    Route::delete('user/document/{document_id}', [UserDocumentController::class, 'deleteUserDocumentById']);
+    Route::group(['middleware' => ['profile.verify']], function() {
+        Route::post('user/document', [UserDocumentController::class, 'addUserDocument']);
+        Route::get('user/document', [UserDocumentController::class, 'fetchUserDocuments']);
+        Route::get('user/document/{document_id}', [UserDocumentController::class, 'fetchUserDocumentById']);
+        Route::delete('user/document/{document_id}', [UserDocumentController::class, 'deleteUserDocumentById']);
+    });
+
+    Route::get('user/job/all/paginate', [JobController::class, 'getAllJobPaginate']);
+    Route::get('user/job/filter/paginate', [JobController::class, 'getJobPaginateWithOtherFilter']);
 });
 
 

@@ -21,18 +21,8 @@ class JobApplicationController extends Controller
         $this->company_profile = CompanyProfile::where('user_id', $this->user->id)->first();
     }
     //
-    public function validateCompany()
-    {
-        if (!isset($this->company_profile))
-        {
-            return Helper::ErrorResponse("Sorry, you need to complete your profile first", Response::HTTP_FORBIDDEN);
-        }
-    }
-
     public function fetchCompanyApplicants()
     {
-        $this->validateCompany();
-
         $jobs = $this->company_profile->jobs;
         $job_applicants = array();
 
@@ -53,8 +43,6 @@ class JobApplicationController extends Controller
 
     public function updateStatus(Request $request)
     {
-        $this->validateCompany();
-
         $input = $request->all();
 
         $validator = Validator::make($input, [
@@ -80,8 +68,6 @@ class JobApplicationController extends Controller
 
     public function fetchApplicantsByFilter(Request $request)
     {
-        $this->validateCompany();
-
         $queries = $request->query();
 
         $validator = Validator::make($queries, [
@@ -110,5 +96,21 @@ class JobApplicationController extends Controller
         }
 
         return Helper::SuccessResponse(true, $job_applicants, 'success', Response::HTTP_OK);
+    }
+
+    public function addJobApplication() {
+
+    }
+
+    public function getApplicationDetailById() {
+
+    }
+
+    public function getListOfAppliedJobs() {
+
+    }
+
+    public function getListOfAppliedJobsWithFilter() {
+
     }
 }
