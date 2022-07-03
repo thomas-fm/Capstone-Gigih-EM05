@@ -33,6 +33,6 @@ class Job extends Model
 
     public function course_requirements()
     {
-        return $this->hasMany(CourseRequirement::class);
+        return $this->belongsToMany(Course::class, CourseRequirement::class);
     }
 }

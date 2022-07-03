@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Illuminate\Validation\ValidationException;
+use Exception;
+use Helper;
 
 class Handler extends ExceptionHandler
 {
@@ -38,5 +40,10 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        return Helper::ErrorResponse($e->getMessage(), 400);
     }
 }

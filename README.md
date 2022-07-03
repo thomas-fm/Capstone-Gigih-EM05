@@ -9,12 +9,13 @@
 ### Installation
 - Clone repository
 - Go to project directory
-- Run `composer install` or `compose update` to generate dependencies
+- Run `composer install` or `composer update` to generate dependencies
 - Generate key `php artisan key:generate`
 - Copy `env.example` file to `env`
 - Change database configuration
 - Create local database
 - Generate JWT key with `php artisan jwt:secret` or copy from `env.example`
+- Publish JWT vendor `php artisan vendor:publish`
 ### Run the project
 - Go to project directory
 - Run migrations and seeder if needed. Quick command with `php artisan migrate:refresh --seed`

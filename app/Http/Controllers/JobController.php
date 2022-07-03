@@ -13,6 +13,7 @@ use JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\UserProfile;
 use App\Models\Course;
+use Illuminate\Database\QueryException;
 
 class JobController extends Controller
 {
@@ -27,15 +28,12 @@ class JobController extends Controller
     }
     public function fetchAllJobs(Request $request)
     {
-        $jobs = $this->company_profile->jobs;
+        $jobs = $this->company_profile
+                    ->jobs()
+                    ->with('categories', 'course_requirements')
+                    ->get();
 
         // add categories and course requirements if true
-        foreach($jobs as $index => $job)
-        {
-            $categories = $job->categories()->get(['categories.id', 'categories.name']);
-            $jobs[$index]['categories'] = $categories;
-        }
-
         return Helper::SuccessResponse(true, $jobs, 'success', Response::HTTP_OK);
     }
 
@@ -49,14 +47,8 @@ class JobController extends Controller
         // check if company profile exist
         $job = $this->company_profile->jobs()
                     ->where(['id' => $job_id])
+                    ->with('categories', 'course_requirements')
                     ->first();
-
-        // add categories and course requirements if true
-        if (isset($job))
-        {
-            $categories = $job->categories()->get(['categories.id', 'categories.name']);
-            $job['categories'] = $categories;
-        }
 
         return Helper::SuccessResponse(true, $job, 'success', Response::HTTP_OK);
     }
@@ -66,7 +58,7 @@ class JobController extends Controller
         $input = $request->all();
         $validator = Validator::make($input, [
             'position' => ['required', 'string'],
-            'type' => ['required', 'in:fulltime,intern,parttime,freelance'],
+            'type' => ['required', 'in:FULLTIME,INTERN,PARTTIME,FREELANCE'],
             'description' => ['required', 'string'],
             'isRemote' => ['required', 'boolean'],
             'city' => ['string'],
@@ -85,49 +77,55 @@ class JobController extends Controller
 
             return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
+        try {
+            // check if category exist
+            $job = new Job();
+            $job->position = $input['position'];
+            $job->type = $input['type'];
+            $job->description = $input['description'];
+            $job->isRemote = $input['isRemote'];
+            $job->city = $input['city'];
+            $job->province = $input['province'];
+            $job->minSalary = $input['minSalary'];
+            $job->maxSalary = $input['maxSalary'];
+            $job->expired = $input['expired'];
+            $job->courseRequirement = $input['courseRequirement'];
 
-        // check if category exist
-        $job = new Job();
-        $job->position = $input['position'];
-        $job->type = $input['type'];
-        $job->description = $input['description'];
-        $job->isRemote = $input['isRemote'];
-        $job->city = $input['city'];
-        $job->province = $input['province'];
-        $job->minSalary = $input['minSalary'];
-        $job->maxSalary = $input['maxSalary'];
-        $job->expired = $input['expired'];
-        $job->courseRequirement = $input['courseRequirement'];
+            $this->company_profile->jobs()->save($job);
 
-        $this->company_profile->jobs()->save($job);
+            $job->refresh();
 
-        $job->refresh();
-
-        if (isset($input['categories']))
-        {
-            foreach($input['categories'] as $categoryId)
+            if (isset($input['categories']))
             {
-                $temp = Category::find($categoryId);
-                if (!is_null($temp)) $job->categories()->attach($categoryId);
+                foreach($input['categories'] as $categoryId)
+                {
+                    $temp = Category::find($categoryId);
+                    if (!is_null($temp)) $job->categories()->attach($categoryId);
+                }
             }
+
+            if ($input['courseRequirement'])
+            {
+                foreach($input['courses'] as $course_id)
+                {
+                    $temp = Course::find($course_id);
+                    if (!is_null($temp)) $job->course_requirements()->attach($course_id);
+                }
+            }
+
+            $job->refresh();
+
+            // get the data back
+            $categories = $job->categories()->get(['categories.id', 'categories.name']);
+            $courses = $job->course_requirements()->get();
+            $job['categories'] = $categories;
+            $job['courses'] = $courses;
+
+            return Helper::SuccessResponse(true, $job, "success", Response::HTTP_CREATED);
+        } catch (QueryException $e) {
+
         }
 
-        if ($input['courseRequirement'])
-        {
-            foreach($input['courses'] as $course_id)
-            {
-                $temp = Course::find($course_id);
-                if (!is_null($temp)) $job->course_requirements()->attach($course_id);
-            }
-        }
-
-        $job->refresh();
-
-        // get the data back
-        $categories = $job->categories()->get(['categories.id', 'categories.name']);
-        $job['categories'] = $categories;
-
-        return Helper::SuccessResponse(true, $job, "success", Response::HTTP_CREATED);
     }
     public function updateActiveStatus(Request $request)
     {
@@ -148,13 +146,27 @@ class JobController extends Controller
 
         if (is_null($job)) return Helper::ErrorResponse("Data not found", Response::HTTP_BAD_REQUEST);
 
-        $job->active = $input['active'];
-        $job->save();
+        try {
+            $job->active = $input['active'];
+            $job->save();
 
-        $categories = $job->categories()->get(['categories.id', 'categories.name']);
-        $job['categories'] = $categories;
+            // $job = $job->with('categories');
 
-        return Helper::SuccessResponse(true, $job, "success", Response::HTTP_OK);
+            $categories = $job->categories()->get(['categories.id', 'categories.name']);
+            $courses = $job->course_requirements()->get();
+
+            $job['categories'] = $categories;
+            $job['courses'] = $courses;
+
+            return Helper::SuccessResponse(true, $job, "success", Response::HTTP_OK);
+        } catch (QueryException $e) {
+            $errorInfo = $e->getMessage();
+
+            error_log($errorInfo);
+
+            return Helper::ErrorResponse('Invalid request: '.$errorInfo, Response::HTTP_BAD_REQUEST);
+        }
+
     }
     public function deleteJobs(Request $request)
     {
@@ -190,7 +202,7 @@ class JobController extends Controller
             return Helper::ErrorResponse("Validation failed: ".$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
-        $jobs = Job::offset($query['offset'])->limit($query['limit'])->get();
+        $jobs = Job::with('categories', 'course_requirements')->offset($query['offset'])->limit($query['limit'])->get();
         return Helper::SuccessResponse(true, $jobs, "success", Response::HTTP_ACCEPTED);
     }
 
@@ -226,6 +238,7 @@ class JobController extends Controller
         if ($request->has('type')) $filter[] = ['type', '=', $query['type']];
 
         $jobs = Job::where($filter)
+                    ->with('categories', 'course_requirements')
                     ->offset($query['offset'])
                     ->limit($query['limit'])
                     ->get();
@@ -235,9 +248,8 @@ class JobController extends Controller
 
             foreach($jobs as $job) {
                 $job_by_category = $job->categories()->where('category_id', $query['category_id']);
-                error_log(json_encode($job_by_category));
 
-                if ($job_by_category->first()) $filtered_jobs[] = $job_by_category->first();
+                if ($job_by_category->first()) $filtered_jobs[] = $job;
             }
 
             return Helper::SuccessResponse(true, $filtered_jobs, "success", Response::HTTP_ACCEPTED);
