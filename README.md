@@ -22,6 +22,7 @@ As a Capstone Project to solve Employability problem in Indonesia, we decided to
 - Run migrations and seeder if needed. Quick command with `php artisan migrate:refresh --seed`
 - Run `php artisan serve`
 - Open `http://127.0.0.1:8000`
+- See available endpoint and payload [here](https://documenter.getpostman.com/view/20080194/UzJFudWu#intro) (for json request)
 
 ## How to verify Registration email & Forgot password
 - Open `https://mailtrap.io`
