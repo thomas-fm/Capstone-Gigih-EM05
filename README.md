@@ -2,7 +2,7 @@
 
 ## Requirement
 - PHP 7.3+
-- Laravel 8
+- [Laravel 8](https://laravel.com/docs/8.x)
 - MySQL server
 
 ## How to run
@@ -30,7 +30,5 @@
 - To be able to see the incoming email for verification and forget password you can go to the Inboxes tab
 
 ## Documentation & Resources
-- ERD + Use case : https://lucid.app/lucidchart/a9052a03-273d-4cd2-8ef7-90d295edc1f2/edit?viewport_loc=-308%2C1%2C2219%2C1065%2CvPAncC6G.YyX&invitationId=inv_c7ed0e39-ab7b-473b-aa72-b9889aee3f6e#
-- Laravel 8 : https://laravel.com/docs/8.x 
-- CRUD + Auth : https://www.codecheef.org/article/laravel-6-rest-api-with-jwt-authentication-with-crud 
-- Relationship : https://appdividend.com/2022/01/21/laravel-many-to-many-relationship/ 
+- [Postman Collection](https://documenter.getpostman.com/view/20080194/UzJFudWu#intro)
+- [ERD + Use case](https://lucid.app/lucidchart/a9052a03-273d-4cd2-8ef7-90d295edc1f2/edit?viewport_loc=-308%2C1%2C2219%2C1065%2CvPAncC6G.YyX&invitationId=inv_c7ed0e39-ab7b-473b-aa72-b9889aee3f6e#)
