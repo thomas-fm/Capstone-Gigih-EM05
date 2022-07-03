@@ -29,6 +29,13 @@ class CourseSeeder extends Seeder
                 'difficulty' => 'INTERMEDIATE',
                 'price' => 200000,
             ],
+            [
+                'category_id' => 3,
+                'title' => 'Learn Ruby on Rails on 30 day',
+                'description' => 'Materi dari technical lead Gojek',
+                'difficulty' => 'ADVANCE',
+                'price' => 0,
+            ],
         ]);
     }
 }

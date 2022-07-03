@@ -48,6 +48,8 @@ Route::group(['middleware' => ['jwt.verify:USER,user']], function() {
         Route::get('user/document', [UserDocumentController::class, 'fetchUserDocuments']);
         Route::get('user/document/{document_id}', [UserDocumentController::class, 'fetchUserDocumentById']);
         Route::delete('user/document/{document_id}', [UserDocumentController::class, 'deleteUserDocumentById']);
+
+        Route::post('user/job-apply', [JobApplicationController::class, 'addJobApplication']);
     });
 
     Route::get('user/job/all/paginate', [JobController::class, 'getAllJobPaginate']);

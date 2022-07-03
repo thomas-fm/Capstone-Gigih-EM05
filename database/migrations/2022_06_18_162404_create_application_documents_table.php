@@ -15,11 +15,11 @@ class CreateApplicationDocumentsTable extends Migration
     {
         Schema::create('application_documents', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('application_id')->unsigned();
-            $table->bigInteger('document_id')->unsigned();
+            $table->bigInteger('job_application_id')->unsigned();
+            $table->bigInteger('user_document_id')->unsigned();
 
-            $table->foreign('application_id')->references('id')->on('job_applications')->onDelete('cascade');;
-            $table->foreign('document_id')->references('id')->on('user_documents')->onDelete('cascade');;
+            $table->foreign('job_application_id')->references('id')->on('job_applications')->onDelete('cascade');;
+            $table->foreign('user_document_id')->references('id')->on('user_documents')->onDelete('cascade');;
         });
     }
 

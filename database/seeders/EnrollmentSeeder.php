@@ -37,6 +37,16 @@ class EnrollmentSeeder extends Seeder
                 'due' => Carbon::createFromFormat('Y-m-d', '2022-08-21'),
                 'expired' => Carbon::createFromFormat('Y-m-d', '2025-08-21'),
             ],
+            [
+                'user_profile_id' => 1,
+                'course_id' =>  3,
+                'registration_id' => Str::orderedUuid(),
+                'status' => 'COMPLETED',
+                'grade' => 94,
+                'progress' => 100,
+                'due' => Carbon::createFromFormat('Y-m-d', '2022-08-21'),
+                'expired' => Carbon::createFromFormat('Y-m-d', '2025-08-21'),
+            ],
         ]);
     }
 }

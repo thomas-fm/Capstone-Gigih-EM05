@@ -31,6 +31,21 @@ class JobSeeder extends Seeder
                 'active' => true,
                 'courseRequirement' => false
             ],
+            [
+                'company_profile_id' => 1,
+                'position' => 'Freelance Software Engineer',
+                'type' => 'FULLTIME',
+                'description' => 'Min 2+ year experience with Ruby on Rails. ',
+                'isRemote' => false,
+                'city' => 'Kota Semarang',
+                'province' => 'Jawa Tengah',
+                'duration' => null,
+                'minSalary' => '6000000',
+                'maxSalary' => '12000000',
+                'expired' => Carbon::createFromFormat('Y-m-d', '2023-05-21'),
+                'active' => true,
+                'courseRequirement' => true
+            ],
         ]);
     }
 }

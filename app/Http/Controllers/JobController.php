@@ -12,6 +12,7 @@ use Helper;
 use JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\UserProfile;
+use App\Models\Course;
 
 class JobController extends Controller
 {
@@ -74,7 +75,8 @@ class JobController extends Controller
             'maxSalary' => ['integer', 'gt:0'],
             'expired' => ['required', 'string'],
             'categories' => ['required'],
-            'courseRequirement' => ['required', 'boolean']
+            'courseRequirement' => ['required', 'boolean'],
+            "courses" => ["required_if:courseRequirement,==,true"]
         ]);
 
         if($validator->fails())
@@ -109,6 +111,16 @@ class JobController extends Controller
                 if (!is_null($temp)) $job->categories()->attach($categoryId);
             }
         }
+
+        if ($input['courseRequirement'])
+        {
+            foreach($input['courses'] as $course_id)
+            {
+                $temp = Course::find($course_id);
+                if (!is_null($temp)) $job->course_requirements()->attach($course_id);
+            }
+        }
+
         $job->refresh();
 
         // get the data back

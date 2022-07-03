@@ -15,10 +15,10 @@ class CreateApplicationCoursesTable extends Migration
     {
         Schema::create('application_courses', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('application_id')->unsigned();
+            $table->bigInteger('job_application_id')->unsigned();
             $table->bigInteger('enrollment_id')->unsigned();
 
-            $table->foreign('application_id')->references('id')->on('job_applications')->onDelete('cascade');
+            $table->foreign('job_application_id')->references('id')->on('job_applications')->onDelete('cascade');
             $table->foreign('enrollment_id')->references('id')->on('enrollments')->onDelete('cascade');;
         });
     }

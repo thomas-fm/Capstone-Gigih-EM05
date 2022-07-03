@@ -30,11 +30,11 @@ class JobApplication extends Model
 
     public function enrollments()
     {
-        return $this->belongsToMany(Enrollment::class);
+        return $this->belongsToMany(Enrollment::class, 'application_courses');
     }
 
     public function user_documents()
     {
-        return $this->belongsToMany(UserDocument::class);
+        return $this->belongsToMany(UserDocument::class, 'application_documents');
     }
 }

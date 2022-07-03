@@ -30,4 +30,9 @@ class Job extends Model
     {
         return $this->hasMany(JobApplication::class);
     }
+
+    public function course_requirements()
+    {
+        return $this->hasMany(CourseRequirement::class);
+    }
 }
