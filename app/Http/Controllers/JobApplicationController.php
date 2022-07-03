@@ -249,15 +249,79 @@ class JobApplicationController extends Controller
         return Helper::SuccessResponse(true, $job_application, 'success', Response::HTTP_OK);
     }
 
-    public function getApplicationDetailById(Request $request) {
+    public function cancelJobApplication(Request $request) {
+        $input = $request->only('job_application_id', 'status');
 
+        $validator = Validator::make($input, [
+            "job_application_id" => ['required', 'integer'],
+            "status" => ['required', 'in:WITHDRAW'],
+        ]);
+
+        if($validator->fails())
+        {
+            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
+        }
+
+        $job_application = $this->user_profile
+                        ->job_applications()
+                        ->where('id', $input['job_application_id'])
+                        ->get()
+                        ->first();
+        if (!$job_application) return Helper::ErrorResponse('Data not found.', Response::HTTP_NOT_FOUND);
+
+        $job_application->status = $input['status'];
+        $job_application->save();
+        $job_application->refresh();
+
+        return Helper::SuccessResponse(true, $job_application, 'Withdraw from the application', Response::HTTP_OK);
     }
 
-    public function getListOfAppliedJobs(Request $request) {
+    public function getApplicationDetailById(Request $request) {
+        $input = $request->only('job_application_id', 'status');
 
+        $validator = Validator::make($input, [
+            "job_application_id" => ['required', 'integer'],
+            "status" => ['required', 'in:WITHDRAW'],
+        ]);
+
+        if($validator->fails())
+        {
+            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
+        }
+
+        $job_application = $this->user_profile
+                        ->job_applications()
+                        ->where('id', $input['job_application_id'])
+                        ->with('jobs', 'application_documents', 'application_courses')
+                        ->get()
+                        ->first();
+        if (!$job_application) return Helper::ErrorResponse('Data not found.', Response::HTTP_NOT_FOUND);
+
+        return Helper::SuccessResponse(true, $job_application, 'Withdraw from the application', Response::HTTP_OK);
+    }
+
+    public function getListOfAppliedJobs() {
+        $job_application = $this->user_profile
+                        ->job_applications();
+        return Helper::SuccessResponse(true, $job_application, 'success', Response::HTTP_OK);
     }
 
     public function getListOfAppliedJobsWithFilter(Request $request) {
+        $input = $request->only('status');
 
+        $validator = Validator::make($input, [
+            "status" => ['required', 'in:WITHDRAW,SUBMITTED,ON_REVIEW,ACCEPTED,REJECTED'],
+        ]);
+
+        if($validator->fails())
+        {
+            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
+        }
+
+        $job_application = $this->user_profile
+                    ->job_applications()
+                    ->where('status', $input['status']);
+
+        return Helper::SuccessResponse(true, $job_application, 'success', Response::HTTP_OK);
     }
 }
