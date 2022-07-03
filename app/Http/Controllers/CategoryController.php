@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Helper;
 use App\Models\Category;
+use Symfony\Component\HttpFoundation\Response;
 
 class CategoryController extends Controller
 {

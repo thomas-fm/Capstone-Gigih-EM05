@@ -30,6 +30,10 @@ Route::group(['middleware' => ['jwt.verify:ADMIN,USER,COMPANY,admin,user,company
     Route::get('logout', [ApiController::class, 'logout']);
 });
 
+Route::group(['middleware' => ['jwt.verify:ADMIN,admin']], function() {
+    Route::post('admin/category', [CategoryController::class, 'addCategory']);
+});
+
 Route::group(['middleware' => ['jwt.verify:COMPANY,company']], function() {
     Route::group(['middleware' => ['profile.verify']], function() {
         Route::get('company/job', [JobController::class, 'fetchAllJobs']);
