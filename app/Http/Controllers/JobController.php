@@ -58,7 +58,7 @@ class JobController extends Controller
         $input = $request->all();
         $validator = Validator::make($input, [
             'position' => ['required', 'string'],
-            'type' => ['required', 'in:fulltime,intern,parttime,freelance'],
+            'type' => ['required', 'in:FULLTIME,INTERN,PARTTIME,FREELANCE'],
             'description' => ['required', 'string'],
             'isRemote' => ['required', 'boolean'],
             'city' => ['string'],
@@ -117,7 +117,9 @@ class JobController extends Controller
 
             // get the data back
             $categories = $job->categories()->get(['categories.id', 'categories.name']);
+            $courses = $job->course_requirements()->get();
             $job['categories'] = $categories;
+            $job['courses'] = $courses;
 
             return Helper::SuccessResponse(true, $job, "success", Response::HTTP_CREATED);
         } catch (QueryException $e) {
@@ -151,7 +153,10 @@ class JobController extends Controller
             // $job = $job->with('categories');
 
             $categories = $job->categories()->get(['categories.id', 'categories.name']);
+            $courses = $job->course_requirements()->get();
+
             $job['categories'] = $categories;
+            $job['courses'] = $courses;
 
             return Helper::SuccessResponse(true, $job, "success", Response::HTTP_OK);
         } catch (QueryException $e) {
@@ -197,7 +202,7 @@ class JobController extends Controller
             return Helper::ErrorResponse("Validation failed: ".$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
-        $jobs = Job::offset($query['offset'])->limit($query['limit'])->get();
+        $jobs = Job::with('categories', 'course_requirements')->offset($query['offset'])->limit($query['limit'])->get();
         return Helper::SuccessResponse(true, $jobs, "success", Response::HTTP_ACCEPTED);
     }
 
@@ -233,6 +238,7 @@ class JobController extends Controller
         if ($request->has('type')) $filter[] = ['type', '=', $query['type']];
 
         $jobs = Job::where($filter)
+                    ->with('categories', 'course_requirements')
                     ->offset($query['offset'])
                     ->limit($query['limit'])
                     ->get();
@@ -242,9 +248,8 @@ class JobController extends Controller
 
             foreach($jobs as $job) {
                 $job_by_category = $job->categories()->where('category_id', $query['category_id']);
-                error_log(json_encode($job_by_category));
 
-                if ($job_by_category->first()) $filtered_jobs[] = $job_by_category->first();
+                if ($job_by_category->first()) $filtered_jobs[] = $job;
             }
 
             return Helper::SuccessResponse(true, $filtered_jobs, "success", Response::HTTP_ACCEPTED);

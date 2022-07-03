@@ -15,6 +15,7 @@ use Whoops\Exception\ErrorException;
 use App\Models\CourseRequirement;
 use App\Models\UserProfile;
 use Illuminate\Database\QueryException;
+use stdClass;
 
 class JobApplicationController extends Controller
 {
@@ -37,10 +38,10 @@ class JobApplicationController extends Controller
         foreach($jobs as $i => $job)
         {
             $applicants = $job->job_applications()
-                                ->with('user_profile', 'user_documents', 'enrollments')
+                                ->with('user_profile', 'user_documents', 'enrollments', 'job')
                                 ->get();
-            $job['applicants'] = $applicants;
-            $job_applicants[] = $job;
+
+            if ($applicants->first()) $job_applicants[] = $applicants;
         }
 
         return Helper::SuccessResponse(true, $job_applicants, 'success', Response::HTTP_OK);
@@ -53,7 +54,7 @@ class JobApplicationController extends Controller
         if (!isset($job_application_id)) return Helper::ErrorResponse("Required job application id param", Response::HTTP_BAD_REQUEST);
 
         $job_application = JobApplication::where('id', $job_application_id)
-                        ->with('job', 'enrollments', 'user_documents')
+                        ->with('job', 'enrollments', 'user_documents', 'user_profile')
                         ->get()
                         ->first();
         if (!$job_application) return Helper::ErrorResponse('Data not found.', Response::HTTP_NOT_FOUND);
@@ -113,18 +114,18 @@ class JobApplicationController extends Controller
         $job_applicants = array();
 
         if (isset($job_id) && isset($status)) {
-            $job_applicants = JobApplication::with('user_profile', 'user_documents', 'enrollments')
+            $job_applicants = JobApplication::with('user_profile', 'user_documents', 'enrollments', 'job')
                                 ->where([
                                     ["job_id", "=", $job_id],
                                     ["status", "=", $status]
                                 ])
                                 ->get();
         } else if (isset($job_id)) {
-            $job_applicants = JobApplication::with('user_profile', 'user_documents', 'enrollments')
+            $job_applicants = JobApplication::with('user_profile', 'user_documents', 'enrollments', 'job')
                                 ->where("job_id", $job_id)
                                 ->get();
         } else if (isset($status)) {
-            $job_applicants = JobApplication::with('user_profile', 'user_documents', 'enrollments')
+            $job_applicants = JobApplication::with('user_profile', 'user_documents', 'enrollments', 'job')
                                     ->where("status", $status)
                                     ->get();
         }
@@ -190,8 +191,7 @@ class JobApplicationController extends Controller
                                             ->get();
 
                 foreach ($course_requirements as $course_requirement) {
-                    $course_id = $course_requirement->course_id;
-
+                    $course_id = $course_requirement->id;
                     $enrollments = $this->user_profile->enrollments()
                                     ->where([
                                         ['status', '=', 'COMPLETED'],
