@@ -7,6 +7,7 @@ use App\Http\Controllers\JobApplicationController;
 use App\Http\Controllers\AuthControllerV2;
 use App\Http\Controllers\UserDocumentController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CompanyProfileController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -37,6 +38,8 @@ Route::group(['middleware' => ['jwt.verify:COMPANY,company']], function() {
         Route::get('company/job/id/{jobId}', [JobController::class, 'fetchJobById']);
         Route::delete('company/job', [JobController::class, 'deleteJobs']);
 
+        Route::patch('company/profile', [CompanyProfileController::class, 'updateCompanyProfile']);
+
         Route::get('company/job-applicant', [JobApplicationController::class, 'fetchCompanyApplicants']);
         Route::get('company/job-applicant/id/{job_application_id}', [JobApplicationController::class, 'fetchCompanyApplicantsById']);
         Route::patch('company/job-applicant/status', [JobApplicationController::class, 'updateStatus']);
@@ -44,6 +47,8 @@ Route::group(['middleware' => ['jwt.verify:COMPANY,company']], function() {
         Route::get('company/job-applicant/user-documents', [JobApplicationController::class, 'fetchApplicantDocuments']);
         Route::get('company/job-applicant/user-courses', [JobApplicationController::class, 'fetchApplicantCourse']);
     });
+
+    Route::post('company/profile', [CompanyProfileController::class, 'addCompanyProfile']);
 });
 
 Route::group(['middleware' => ['jwt.verify:USER,user']], function() {
