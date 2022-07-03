@@ -11,29 +11,22 @@ use App\Models\Job;
 use Helper;
 use JWTAuth;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\UserProfile;
+use App\Models\Course;
 
 class JobController extends Controller
 {
     protected $user;
     protected $company_profile;
+    protected $user_profile;
     public function __construct()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
         $this->company_profile = CompanyProfile::where('user_id', $this->user->id)->first();
+        $this->user_profile = UserProfile::where('user_id', $this->user->id)->first();
     }
-
-    public function validateCompany()
-    {
-        if (!isset($this->company_profile))
-        {
-            return Helper::ErrorResponse("Sorry, you need to complete your profile first", Response::HTTP_FORBIDDEN);
-        }
-    }
-
     public function fetchAllJobs(Request $request)
     {
-        $this->validateCompany();
-
         $jobs = $this->company_profile->jobs;
 
         // add categories and course requirements if true
@@ -48,8 +41,6 @@ class JobController extends Controller
 
     public function fetchJobById(Request $request)
     {
-        $this->validateCompany();
-
         // validate request
         $job_id = $request->route('jobId');
 
@@ -72,8 +63,6 @@ class JobController extends Controller
 
     public function createJob(Request $request)
     {
-        $this->validateCompany();
-
         $input = $request->all();
         $validator = Validator::make($input, [
             'position' => ['required', 'string'],
@@ -86,7 +75,8 @@ class JobController extends Controller
             'maxSalary' => ['integer', 'gt:0'],
             'expired' => ['required', 'string'],
             'categories' => ['required'],
-            'courseRequirement' => ['required', 'boolean']
+            'courseRequirement' => ['required', 'boolean'],
+            "courses" => ["required_if:courseRequirement,==,true"]
         ]);
 
         if($validator->fails())
@@ -121,6 +111,16 @@ class JobController extends Controller
                 if (!is_null($temp)) $job->categories()->attach($categoryId);
             }
         }
+
+        if ($input['courseRequirement'])
+        {
+            foreach($input['courses'] as $course_id)
+            {
+                $temp = Course::find($course_id);
+                if (!is_null($temp)) $job->course_requirements()->attach($course_id);
+            }
+        }
+
         $job->refresh();
 
         // get the data back
@@ -131,8 +131,6 @@ class JobController extends Controller
     }
     public function updateActiveStatus(Request $request)
     {
-        $this->validateCompany();
-
         $input = $request->all();
         $validator = Validator::make($input, [
             'job_id' => ['required', 'integer'],
@@ -160,8 +158,6 @@ class JobController extends Controller
     }
     public function deleteJobs(Request $request)
     {
-        $this->validateCompany();
-
         $input = $request->all();
         $validator = Validator::make($input, [
             'job_id' => ['required', 'integer'],
@@ -177,5 +173,76 @@ class JobController extends Controller
 
         if ($deleted) return Helper::SuccessResponse(true, null, "success", Response::HTTP_ACCEPTED);
         return Helper::ErrorResponse('Data not found', Response::HTTP_BAD_REQUEST);
+    }
+
+    public function getAllJobPaginate(Request $request)
+    {
+        $query = $request->all();
+
+        $validator = Validator::make($query, [
+            'limit' => ['required', 'integer'],
+            'offset' => ['required', 'integer']
+        ]);
+
+        if($validator->fails())
+        {
+            error_log($validator->errors());
+            return Helper::ErrorResponse("Validation failed: ".$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
+        }
+
+        $jobs = Job::offset($query['offset'])->limit($query['limit'])->get();
+        return Helper::SuccessResponse(true, $jobs, "success", Response::HTTP_ACCEPTED);
+    }
+
+    public function getJobPaginateWithOtherFilter(Request $request)
+    {
+        $query = $request->all();
+
+        $validator = Validator::make($query, [
+            'limit' => ['required', 'integer'],
+            'offset' => ['required', 'integer'],
+            'city' => ['string'],
+            'province' => ['string'],
+            'isRemote' => ['boolean'],
+            'minSalary' => ['boolean'],
+            'maxSalary' => ['boolean'],
+            'type' => ['string'],
+            'category_id' => ['integer']
+        ]);
+
+        if($validator->fails())
+        {
+            error_log($validator->errors());
+            return Helper::ErrorResponse("Validation failed: ".$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
+        }
+
+        $filter = [];
+
+        if ($request->has('province')) $filter[] = ['province', '=', $query['province']];
+        if ($request->has('city')) $filter[] = ['city', '=', $query['city']];
+        if ($request->has('isRemote')) $filter[] = ['isRemote', '=', $query['isRemote']];
+        if ($request->has('minSalary')) $filter[] = ['minSalary', '>=', $query['minSalary']];
+        if ($request->has('maxSalary')) $filter[] = ['maxSalary', '<=', $query['maxSalary']];
+        if ($request->has('type')) $filter[] = ['type', '=', $query['type']];
+
+        $jobs = Job::where($filter)
+                    ->offset($query['offset'])
+                    ->limit($query['limit'])
+                    ->get();
+
+        if ($request->has('category_id')) {
+            $filtered_jobs = [];
+
+            foreach($jobs as $job) {
+                $job_by_category = $job->categories()->where('category_id', $query['category_id']);
+                error_log(json_encode($job_by_category));
+
+                if ($job_by_category->first()) $filtered_jobs[] = $job_by_category->first();
+            }
+
+            return Helper::SuccessResponse(true, $filtered_jobs, "success", Response::HTTP_ACCEPTED);
+        }
+
+        return Helper::SuccessResponse(true, $jobs, "success", Response::HTTP_ACCEPTED);
     }
 }

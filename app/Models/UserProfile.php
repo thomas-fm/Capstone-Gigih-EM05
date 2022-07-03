@@ -29,4 +29,13 @@ class UserProfile extends Model
     {
         return $this->hasMany(UserDocument::class);
     }
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function job_applications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
 }

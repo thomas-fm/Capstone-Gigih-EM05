@@ -15,9 +15,9 @@
 - Change database configuration
 - Create local database
 - Generate JWT key with `php artisan jwt:secret` or copy from `env.example`
-### Run local
+### Run the project
 - Go to project directory
-- Run migrations and seeder if needed
+- Run migrations and seeder if needed. Quick command with `php artisan migrate:refresh --seed`
 - Run `php artisan serve`
 - Open `http://127.0.0.1:8000`
 
@@ -34,6 +34,3 @@
 - Laravel 8 : https://laravel.com/docs/8.x 
 - CRUD + Auth : https://www.codecheef.org/article/laravel-6-rest-api-with-jwt-authentication-with-crud 
 - Relationship : https://appdividend.com/2022/01/21/laravel-many-to-many-relationship/ 
-
-## TODO
-- Setup email verification

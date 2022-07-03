@@ -22,11 +22,11 @@ class DatabaseSeeder extends Seeder
             JobCategorySeeder::class,
             CourseSeeder::class,
             EnrollmentSeeder::class,
-            SkillAssesmentSeeder::class,
             UserDocumentSeeder::class,
             JobApplicationSeeder::class,
             ApplicationCourseSeeder::class,
-            ApplicationDocumentSeeder::class
+            ApplicationDocumentSeeder::class,
+            CourseRequirementSeeder::class
         ]);
     }
 }

@@ -18,7 +18,7 @@ class CreateCoursesTable extends Migration
             $table->bigInteger('category_id')->unsigned();
             $table->string('title');
             $table->string('description');
-            $table->enum('difficulty', ['BEGINNER', 'INTERMEDIATE', 'ADVANCED']);
+            $table->enum('difficulty', ['BEGINNER', 'INTERMEDIATE', 'ADVANCE']);
             $table->bigInteger('price')->unsigned();
 
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

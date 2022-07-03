@@ -16,8 +16,8 @@ class ApplicationDocumentSeeder extends Seeder
     {
         DB::table('application_documents')->insert([
             [
-                'application_id' => 1,
-                'document_id' => 3,
+                'job_application_id' => 1,
+                'user_document_id' => 3,
             ]
         ]);
     }

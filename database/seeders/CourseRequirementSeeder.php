@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class ApplicationCourseSeeder extends Seeder
+class CourseRequirementSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,10 +14,10 @@ class ApplicationCourseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('application_courses')->insert([
+        DB::table('course_requirements')->insert([
             [
-                'job_application_id' => 1,
-                'enrollment_id' => 2,
+                'job_id' => 2,
+                'course_id' =>  3,
             ]
         ]);
     }

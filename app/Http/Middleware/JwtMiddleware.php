@@ -30,8 +30,10 @@ class JwtMiddleware extends BaseMiddleware
             return $this->unauthorized('Your token has expired. Please, login again.');
         } catch (TokenInvalidException $e) {
             return $this->unauthorized('Your token is invalid. Please, login again.');
-        }catch (JWTException $e) {
+        } catch (JWTException $e) {
             return $this->unauthorized('Please, attach a Bearer Token to your request');
+        } catch (\Throwable $e) {
+            return $this->unauthorized('Your token is invalid. Please, login again.');
         }
 
         if ($user && in_array($user->role, $roles)) {

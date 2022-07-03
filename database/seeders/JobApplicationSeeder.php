@@ -18,7 +18,6 @@ class JobApplicationSeeder extends Seeder
             [
                 'user_profile_id' => 2,
                 'job_id' =>  1,
-                'assesment_id' => 1,
                 'status' => 'ON_REVIEW',
             ]
         ]);

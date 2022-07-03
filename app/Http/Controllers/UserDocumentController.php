@@ -27,17 +27,8 @@ class UserDocumentController extends Controller
         $this->user_profile = UserProfile::where('user_id', $this->user->id)->first();
     }
 
-    public function validateUser()
-    {
-        if (!isset($this->user_profile))
-        {
-            return Helper::ErrorResponse("Sorry, you need to complete your profile first", Response::HTTP_FORBIDDEN);
-        }
-    }
     public function addUserDocument(Request $request)
     {
-        $this->validateUser();
-
         $input = $request->only('type', 'url', 'file');
 
         $validator = Validator::make($input, [
@@ -99,8 +90,6 @@ class UserDocumentController extends Controller
 
     public function fetchUserDocuments()
     {
-        $this->validateUser();
-
         $documents = $this->user_profile->user_documents;
 
         return Helper::SuccessResponse(true, $documents, 'Success', Response::HTTP_OK);
@@ -108,8 +97,6 @@ class UserDocumentController extends Controller
 
     public function fetchUserDocumentById(Request $request)
     {
-        $this->validateUser();
-
         $document_id = $request->route('document_id');
 
         $document = $this->user_profile->user_documents()
@@ -124,8 +111,6 @@ class UserDocumentController extends Controller
 
     public function deleteUserDocumentById(Request $request)
     {
-        $this->validateUser();
-
         $document_id = $request->route('document_id');
 
         $documents = $this->user_profile->user_documents()
