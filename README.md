@@ -1,5 +1,6 @@
 # Capstone Generasi Gigih EM-05
-
+## Description
+As a Capstone Project to solve Employability problem in Indonesia, we decided to develop an online platform for people to learn and gain knowledge while also giving many opportunity for user to apply and search for new job. Our technical focus is developing backend API.
 ## Requirement
 - PHP 7.3+
 - [Laravel 8](https://laravel.com/docs/8.x)
@@ -15,7 +16,7 @@
 - Change database configuration
 - Create local database
 - Generate JWT key with `php artisan jwt:secret` or copy from `env.example`
-- Publish JWT vendor `php artisan vendor:publish`
+- Publish laravel vendor `php artisan vendor:publish`
 ### Run the project
 - Go to project directory
 - Run migrations and seeder if needed. Quick command with `php artisan migrate:refresh --seed`
@@ -29,6 +30,11 @@
 - Password account : `p0o9i8u7`
 - Then click `Project` button on the My Project tab menu
 - To be able to see the incoming email for verification and forget password you can go to the Inboxes tab
+## Member
+- Aldi Rizal Chan
+- Ricky Ananda Pardomuan Sitorus
+- Saeful Sultan
+- Thomas Ferdinand M
 
 ## Documentation & Resources
 - [Postman Collection](https://documenter.getpostman.com/view/20080194/UzJFudWu#intro)
