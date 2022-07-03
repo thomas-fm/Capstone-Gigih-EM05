@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Whoops\Exception\ErrorException;
 use App\Models\CourseRequirement;
 use App\Models\UserProfile;
+use Illuminate\Database\QueryException;
 
 class JobApplicationController extends Controller
 {
@@ -27,7 +28,7 @@ class JobApplicationController extends Controller
         $this->company_profile = CompanyProfile::where('user_id', $this->user->id)->first();
         $this->user_profile = UserProfile::where('user_id', $this->user->id)->first();
     }
-    //
+    // COMPANY CONTROLLER
     public function fetchCompanyApplicants()
     {
         $jobs = $this->company_profile->jobs;
@@ -35,19 +36,30 @@ class JobApplicationController extends Controller
 
         foreach($jobs as $i => $job)
         {
-            $applicants = $job->job_applications;
-
-            foreach($applicants as $j => $applicant)
-            {
-                $applicants[$j]['profile_detail'] = $applicant->user_profile()->get(['user_profiles.fullname', 'user_profiles.email', 'user_profiles.phone']);
-                $applicants[$j]['job_position'] = $job->position;
-            }
-            $job_applicants[] = $applicants;
+            $applicants = $job->job_applications()
+                                ->with('user_profile', 'user_documents', 'enrollments')
+                                ->get();
+            $job['applicants'] = $applicants;
+            $job_applicants[] = $job;
         }
 
         return Helper::SuccessResponse(true, $job_applicants, 'success', Response::HTTP_OK);
     }
 
+    public function fetchCompanyApplicantsById(Request $request)
+    {
+        $job_application_id = $request->route('job_application_id');
+
+        if (!isset($job_application_id)) return Helper::ErrorResponse("Required job application id param", Response::HTTP_BAD_REQUEST);
+
+        $job_application = JobApplication::where('id', $job_application_id)
+                        ->with('job', 'enrollments', 'user_documents')
+                        ->get()
+                        ->first();
+        if (!$job_application) return Helper::ErrorResponse('Data not found.', Response::HTTP_NOT_FOUND);
+
+        return Helper::SuccessResponse(true, $job_application, 'success', Response::HTTP_OK);
+    }
     public function updateStatus(Request $request)
     {
         $input = $request->all();
@@ -63,14 +75,23 @@ class JobApplicationController extends Controller
             return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
 
-        $application = JobApplication::find($input["application_id"]);
+        try {
+            $application = JobApplication::find($input["application_id"]);
 
-        if (is_null($application)) return Helper::ErrorResponse("Data not found", Response::HTTP_NOT_FOUND);
+            if (is_null($application)) return Helper::ErrorResponse("Data not found", Response::HTTP_NOT_FOUND);
 
-        $application->status = $input['status'];
-        $application->save();
+            $application->status = $input['status'];
+            $application->save();
 
-        return Helper::SuccessResponse(true, $application, "Updated succesfully", Response::HTTP_OK);
+            return Helper::SuccessResponse(true, $application, "Updated succesfully", Response::HTTP_OK);
+        } catch(QueryException $e) {
+            $errorInfo = $e->getMessage();
+
+            error_log($errorInfo);
+
+            return Helper::ErrorResponse('Invalid request: '.$errorInfo, Response::HTTP_BAD_REQUEST);
+        }
+
     }
 
     public function fetchApplicantsByFilter(Request $request)
@@ -78,7 +99,7 @@ class JobApplicationController extends Controller
         $queries = $request->query();
 
         $validator = Validator::make($queries, [
-            "status" => ['in:on_review,accepted,rejected,ON_REVIEW,ACCEPTED,REJECTED']
+            "status" => ['in:WITHDRAW,SUBMITTED,ON_REVIEW,ACCEPTED,REJECTED']
         ]);
 
         if($validator->fails())
@@ -92,20 +113,27 @@ class JobApplicationController extends Controller
         $job_applicants = array();
 
         if (isset($job_id) && isset($status)) {
-            $job_applicants = JobApplication::where([
-                ["job_id", "=", $job_id],
-                ["status", "=", $status]
-            ])->get();
+            $job_applicants = JobApplication::with('user_profile', 'user_documents', 'enrollments')
+                                ->where([
+                                    ["job_id", "=", $job_id],
+                                    ["status", "=", $status]
+                                ])
+                                ->get();
         } else if (isset($job_id)) {
-            $job_applicants = JobApplication::where("job_id", $job_id)->get();
+            $job_applicants = JobApplication::with('user_profile', 'user_documents', 'enrollments')
+                                ->where("job_id", $job_id)
+                                ->get();
         } else if (isset($status)) {
-            $job_applicants = JobApplication::where("status", $status)->get();
+            $job_applicants = JobApplication::with('user_profile', 'user_documents', 'enrollments')
+                                    ->where("status", $status)
+                                    ->get();
         }
 
         return Helper::SuccessResponse(true, $job_applicants, 'success', Response::HTTP_OK);
     }
 
-    // todo
+    // COMPANY CONTROLLER
+
     public function fetchApplicantDocuments(Request $request) {
         // application id
         $input = $request->only('application_id');
@@ -188,6 +216,8 @@ class JobApplicationController extends Controller
         throw new ErrorException("Job not found", Response::HTTP_NOT_FOUND);
     }
 
+    // USER CONTROLLER
+
     public function isJobApplicable(Request $request) {
         $input = $request->only('job_id');
 
@@ -226,101 +256,108 @@ class JobApplicationController extends Controller
 
         if (!$user_can_apply) return Helper::ErrorResponse('Can\'t apply to this job ', Response::HTTP_FORBIDDEN);
 
-        $job_application = new JobApplication();
-        $job_application->job()->associate($input['job_id']);
+        try {
+            $job_application = new JobApplication();
+            $job_application->job()->associate($input['job_id']);
 
-        $this->user_profile->job_applications()
-                ->save($job_application);
-        $job_application->refresh();
+            $this->user_profile->job_applications()
+                    ->save($job_application);
+            $job_application->refresh();
 
-        foreach ($input['documents'] as $document) {
-            $job_application->user_documents()
-                            ->attach($document);
+            foreach ($input['documents'] as $document) {
+                $job_application->user_documents()
+                                ->attach($document);
+            }
+
+            foreach($enrollments_data as $data) {
+                $id = $data->id;
+                $job_application->enrollments()->attach($id);
+            }
+            // create application course
+            $job_application->save();
+            $job_application->refresh();
+
+            return Helper::SuccessResponse(true, $job_application, 'success', Response::HTTP_OK);
+        } catch(QueryException $e) {
+            $errorInfo = $e->getMessage();
+
+            error_log($errorInfo);
+
+            return Helper::ErrorResponse('Invalid request: '.$errorInfo, Response::HTTP_BAD_REQUEST);
         }
 
-        foreach($enrollments_data as $data) {
-            $id = $data->id;
-            $job_application->enrollments()->attach($id);
+    }
+
+    public function cancelJobApplication(Request $request) {
+        $input = $request->all();
+
+        error_log(json_encode($input));
+        $validator = Validator::make($input, [
+            "job_application_id" => ['required', 'integer'],
+            "status" => ['required', 'in:WITHDRAW'],
+        ]);
+
+        if($validator->fails())
+        {
+            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
         }
-        // create application course
-        $job_application->save();
-        $job_application->refresh();
+
+        $job_application = $this->user_profile
+                        ->job_applications()
+                        ->where('id', $input['job_application_id'])
+                        ->get()
+                        ->first();
+        if (!$job_application) return Helper::ErrorResponse('Data not found.', Response::HTTP_NOT_FOUND);
+
+        try {
+            $job_application->status = $input['status'];
+            $job_application->save();
+            $job_application->refresh();
+
+            return Helper::SuccessResponse(true, $job_application, 'Withdraw from the application', Response::HTTP_OK);
+        } catch(QueryException $e) {
+            $errorInfo = $e->getMessage();
+
+            error_log($errorInfo);
+
+            return Helper::ErrorResponse('Invalid request: '.$errorInfo, Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function getApplicationDetailById(Request $request) {
+        $job_application_id = $request->route('job_application_id');
+
+        if (!isset($job_application_id)) return Helper::ErrorResponse('Status required', Response::HTTP_BAD_REQUEST);
+
+        $job_application = $this->user_profile
+                        ->job_applications()
+                        ->where('id', $job_application_id)
+                        ->with('job', 'enrollments', 'user_documents')
+                        ->get()
+                        ->first();
+        if (!$job_application) return Helper::ErrorResponse('Data not found.', Response::HTTP_NOT_FOUND);
 
         return Helper::SuccessResponse(true, $job_application, 'success', Response::HTTP_OK);
     }
 
-    public function cancelJobApplication(Request $request) {
-        $input = $request->only('job_application_id', 'status');
-
-        $validator = Validator::make($input, [
-            "job_application_id" => ['required', 'integer'],
-            "status" => ['required', 'in:WITHDRAW'],
-        ]);
-
-        if($validator->fails())
-        {
-            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
-        }
-
-        $job_application = $this->user_profile
-                        ->job_applications()
-                        ->where('id', $input['job_application_id'])
-                        ->get()
-                        ->first();
-        if (!$job_application) return Helper::ErrorResponse('Data not found.', Response::HTTP_NOT_FOUND);
-
-        $job_application->status = $input['status'];
-        $job_application->save();
-        $job_application->refresh();
-
-        return Helper::SuccessResponse(true, $job_application, 'Withdraw from the application', Response::HTTP_OK);
-    }
-
-    public function getApplicationDetailById(Request $request) {
-        $input = $request->only('job_application_id', 'status');
-
-        $validator = Validator::make($input, [
-            "job_application_id" => ['required', 'integer'],
-            "status" => ['required', 'in:WITHDRAW'],
-        ]);
-
-        if($validator->fails())
-        {
-            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
-        }
-
-        $job_application = $this->user_profile
-                        ->job_applications()
-                        ->where('id', $input['job_application_id'])
-                        ->with('jobs', 'application_documents', 'application_courses')
-                        ->get()
-                        ->first();
-        if (!$job_application) return Helper::ErrorResponse('Data not found.', Response::HTTP_NOT_FOUND);
-
-        return Helper::SuccessResponse(true, $job_application, 'Withdraw from the application', Response::HTTP_OK);
-    }
-
     public function getListOfAppliedJobs() {
         $job_application = $this->user_profile
-                        ->job_applications();
+                        ->job_applications()
+                        ->with('job')
+                        ->get();
         return Helper::SuccessResponse(true, $job_application, 'success', Response::HTTP_OK);
     }
 
     public function getListOfAppliedJobsWithFilter(Request $request) {
         $input = $request->only('status');
 
-        $validator = Validator::make($input, [
-            "status" => ['required', 'in:WITHDRAW,SUBMITTED,ON_REVIEW,ACCEPTED,REJECTED'],
-        ]);
-
-        if($validator->fails())
-        {
-            return Helper::ErrorResponse('Invalid request: '.$validator->errors()->first(), Response::HTTP_BAD_REQUEST);
-        }
+        if (!isset($input['status'])) return Helper::ErrorResponse('Status required', Response::HTTP_BAD_REQUEST);
 
         $job_application = $this->user_profile
                     ->job_applications()
-                    ->where('status', $input['status']);
+                    ->where('status', $input['status'])
+                    ->with('job')
+                    ->get();
 
         return Helper::SuccessResponse(true, $job_application, 'success', Response::HTTP_OK);
     }
