@@ -1,0 +1,1214 @@
+{
+	"info": {
+		"_postman_id": "c311e2ee-abef-424d-b88f-f1e8c05dbe77",
+		"name": "Gigih Capstone - EM05",
+		"description": "Prefix:\n\n\\[C\\] : Only for company role\n\n\\[U\\] : Only for user role\n\n\\[A\\] : Only for admin role\n\nFlow :\n\n1.  Register as new user / company\n2.  Login to generate access token\n3.  Copy access token to request header as bearer token\n4.  Fill the user/company profile to use the rest of the API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20080194"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "user1",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "user123",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Login as User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "user1",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "user123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Login as Company",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "company1",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "company123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Login as Admin",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "admin1",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "comp_test",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "comp_test@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123456",
+							"type": "text"
+						},
+						{
+							"key": "confirm_password",
+							"value": "123456",
+							"type": "text"
+						},
+						{
+							"key": "role",
+							"value": "company",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Register as Company",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "comp_test",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "comp_test@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "confirm_password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "company",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "Register as User",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "user_test",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "user_test@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "confirm_password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				}
+			]
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/logout",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[A] Create Category",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODY2NDAxLCJleHAiOjE2NTY5NTI4MDEsIm5iZiI6MTY1Njg2NjQwMSwianRpIjoiT2FLcU5vazQyeG1pdkM5cyIsInN1YiI6IjUiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.OXBSXPRWPnqu6KxLMwirKLJJtqi-tPoTKveEDmpFSgg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/admin/category",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"admin",
+						"category"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Create Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODY0ODY2LCJleHAiOjE2NTY5NTEyNjYsIm5iZiI6MTY1Njg2NDg2NiwianRpIjoiY3JCUlJWQWFyV3Jwc0RqMCIsInN1YiI6IjYiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.T6EGpfbGQDhKvPutODVtO1yfd_DWhiVySd2gort7Smk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Tokopedia\",\r\n    \"description\": \"Lorem Ipsum\",\r\n    \"city\": \"Kota Malang\",\r\n    \"province\": \"Jawa Timur\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/company/profile",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Update Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODY0ODY2LCJleHAiOjE2NTY5NTEyNjYsIm5iZiI6MTY1Njg2NDg2NiwianRpIjoiY3JCUlJWQWFyV3Jwc0RqMCIsInN1YiI6IjYiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.T6EGpfbGQDhKvPutODVtO1yfd_DWhiVySd2gort7Smk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\": \"Lorem Ipsum 2\",\r\n    \"city\": \"Kota Bandung\",\r\n    \"province\": \"Jawa Barat\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/company/profile",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Get Jobs",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODU4NTY1LCJleHAiOjE2NTY5NDQ5NjUsIm5iZiI6MTY1Njg1ODU2NSwianRpIjoiRElGM3hodVJWVkhWUXlacSIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-IuFvW4vtHdLvIRX8WvOTwU_WtlkMiG4PtTLZ38w2IA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/company/job",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Get Job Applicants",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODU4NTY1LCJleHAiOjE2NTY5NDQ5NjUsIm5iZiI6MTY1Njg1ODU2NSwianRpIjoiRElGM3hodVJWVkhWUXlacSIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-IuFvW4vtHdLvIRX8WvOTwU_WtlkMiG4PtTLZ38w2IA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/company/job-applicant",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"job-applicant"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Get Job Applicants By Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODU4NTY1LCJleHAiOjE2NTY5NDQ5NjUsIm5iZiI6MTY1Njg1ODU2NSwianRpIjoiRElGM3hodVJWVkhWUXlacSIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-IuFvW4vtHdLvIRX8WvOTwU_WtlkMiG4PtTLZ38w2IA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/company/job-applicant/id/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"job-applicant",
+						"id",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Get Job Applicants WIth Filter",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODU4NTY1LCJleHAiOjE2NTY5NDQ5NjUsIm5iZiI6MTY1Njg1ODU2NSwianRpIjoiRElGM3hodVJWVkhWUXlacSIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-IuFvW4vtHdLvIRX8WvOTwU_WtlkMiG4PtTLZ38w2IA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/company/job-applicant/filter?status=ACCEPTED",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"job-applicant",
+						"filter"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "ACCEPTED"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Update Application Status",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODU4NTY1LCJleHAiOjE2NTY5NDQ5NjUsIm5iZiI6MTY1Njg1ODU2NSwianRpIjoiRElGM3hodVJWVkhWUXlacSIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-IuFvW4vtHdLvIRX8WvOTwU_WtlkMiG4PtTLZ38w2IA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"application_id\": 1,\r\n    \"status\": \"ACCEPTED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/company/job-applicant/status",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"job-applicant",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Get Job by Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODU4NTY1LCJleHAiOjE2NTY5NDQ5NjUsIm5iZiI6MTY1Njg1ODU2NSwianRpIjoiRElGM3hodVJWVkhWUXlacSIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-IuFvW4vtHdLvIRX8WvOTwU_WtlkMiG4PtTLZ38w2IA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/company/job/id/2",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"job",
+						"id",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Create Job",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODU4NTY1LCJleHAiOjE2NTY5NDQ5NjUsIm5iZiI6MTY1Njg1ODU2NSwianRpIjoiRElGM3hodVJWVkhWUXlacSIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-IuFvW4vtHdLvIRX8WvOTwU_WtlkMiG4PtTLZ38w2IA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"position\": \"Manager\",\r\n    \"type\": \"FULLTIME\",\r\n    \"description\": \"Lorem ipsum\",\r\n    \"isRemote\": false,\r\n    \"city\": \"Kota Bogor\",\r\n    \"province\": \"Jawa Barat\",\r\n    \"minSalary\": \"6000000\",\r\n    \"maxSalary\": \"20000000\",\r\n    \"expired\": \"2023-05-21 17:24:07\",\r\n    \"categories\": [2],\r\n    \"courseRequirement\": true,\r\n    \"courses\": [3]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/company/job",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Update Job Active Status",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODU4NTY1LCJleHAiOjE2NTY5NDQ5NjUsIm5iZiI6MTY1Njg1ODU2NSwianRpIjoiRElGM3hodVJWVkhWUXlacSIsInN1YiI6IjMiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.-IuFvW4vtHdLvIRX8WvOTwU_WtlkMiG4PtTLZ38w2IA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"job_id\": 1,\r\n    \"active\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/company/job/active-status",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"job",
+						"active-status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[C] Delete Job",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"job_id\": 14\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/company/job",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"company",
+						"job"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Upload Document",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODYzMDgwLCJleHAiOjE2NTY5NDk0ODAsIm5iZiI6MTY1Njg2MzA4MCwianRpIjoicWNGWHJzT3A1SkY1QTBPRyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.XDeyZheURKM32HgkdBg3gkcuxEAodzAFa11Ydo154Gc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "type",
+							"value": "portofolio",
+							"type": "text"
+						},
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/ACER/Downloads/Capstone_Proposal_BE_EM5 REVISI I (1).pdf"
+						},
+						{
+							"key": "url",
+							"value": "gmail.com",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/user/document",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"document"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Get User Documents",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODYzMDgwLCJleHAiOjE2NTY5NDk0ODAsIm5iZiI6MTY1Njg2MzA4MCwianRpIjoicWNGWHJzT3A1SkY1QTBPRyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.XDeyZheURKM32HgkdBg3gkcuxEAodzAFa11Ydo154Gc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/user/document",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"document"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Get User Documents By Id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODYzMDgwLCJleHAiOjE2NTY5NDk0ODAsIm5iZiI6MTY1Njg2MzA4MCwianRpIjoicWNGWHJzT3A1SkY1QTBPRyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.XDeyZheURKM32HgkdBg3gkcuxEAodzAFa11Ydo154Gc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/user/document/id/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"document",
+						"id",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Delete Document",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2NjgwMzgwLCJleHAiOjE2NTY3NjY3ODAsIm5iZiI6MTY1NjY4MDM4MCwianRpIjoiVGZIRm0yTEU4VVFwd2dYdSIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.EOccID7Fq4KgZMRua41rBJ39JaNxYjw5JorBbGKKn9I",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/user/document/id/4",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"document",
+						"id",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Get Jobs",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODYzMDgwLCJleHAiOjE2NTY5NDk0ODAsIm5iZiI6MTY1Njg2MzA4MCwianRpIjoicWNGWHJzT3A1SkY1QTBPRyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.XDeyZheURKM32HgkdBg3gkcuxEAodzAFa11Ydo154Gc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/user/job/all/paginate?limit=10&offset=3",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"job",
+						"all",
+						"paginate"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "offset",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Get Jobs With Filter",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODYzMDgwLCJleHAiOjE2NTY5NDk0ODAsIm5iZiI6MTY1Njg2MzA4MCwianRpIjoicWNGWHJzT3A1SkY1QTBPRyIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.XDeyZheURKM32HgkdBg3gkcuxEAodzAFa11Ydo154Gc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/user/job/filter/paginate?limit=10&offset=0&city=Kota Bogor&province=Jawa Barat&category_id=2",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"job",
+						"filter",
+						"paginate"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "city",
+							"value": "Kota Bogor"
+						},
+						{
+							"key": "province",
+							"value": "Jawa Barat"
+						},
+						{
+							"key": "category_id",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Apply Job",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODI3NzIzLCJleHAiOjE2NTY5MTQxMjMsIm5iZiI6MTY1NjgyNzcyMywianRpIjoieWJtV2Q3ZWZLWmFuUU5MSCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pEcIjGgaCfbZheHtcr5qF2fOmxSNQHT6tvDFmgaOIwA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"job_id\": 10,\r\n    \"documents\": [\r\n        1,\r\n        2\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/user/job-apply",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"job-apply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Get Applications",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODI3NzIzLCJleHAiOjE2NTY5MTQxMjMsIm5iZiI6MTY1NjgyNzcyMywianRpIjoieWJtV2Q3ZWZLWmFuUU5MSCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pEcIjGgaCfbZheHtcr5qF2fOmxSNQHT6tvDFmgaOIwA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/user/job-apply",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"job-apply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Get Applications By Id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODI3NzIzLCJleHAiOjE2NTY5MTQxMjMsIm5iZiI6MTY1NjgyNzcyMywianRpIjoieWJtV2Q3ZWZLWmFuUU5MSCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pEcIjGgaCfbZheHtcr5qF2fOmxSNQHT6tvDFmgaOIwA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/user/job-apply/id/7",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"job-apply",
+						"id",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Get Applications With Filter",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODI3NzIzLCJleHAiOjE2NTY5MTQxMjMsIm5iZiI6MTY1NjgyNzcyMywianRpIjoieWJtV2Q3ZWZLWmFuUU5MSCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pEcIjGgaCfbZheHtcr5qF2fOmxSNQHT6tvDFmgaOIwA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/user/job-apply/filter?status=WITHDRAW",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"job-apply",
+						"filter"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "WITHDRAW"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[U] Withdraw From Application",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjU2ODI3NzIzLCJleHAiOjE2NTY5MTQxMjMsIm5iZiI6MTY1NjgyNzcyMywianRpIjoieWJtV2Q3ZWZLWmFuUU5MSCIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.pEcIjGgaCfbZheHtcr5qF2fOmxSNQHT6tvDFmgaOIwA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"job_application_id\": 7,\r\n    \"status\": \"WITHDRAW\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/user/job-apply/withdraw",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"user",
+						"job-apply",
+						"withdraw"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000"
+		}
+	]
+}
