@@ -1,6 +1,22 @@
 # Capstone Generasi Gigih EM-05
 ## Description
 As a Capstone Project to solve Employability problem in Indonesia, we decided to develop an online platform for people to learn and gain knowledge while also giving many opportunity for user to apply and search for new job. Our technical focus is developing backend API.
+
+## Features
+- User can do basic auth login/register/logout
+- There are 3 types of role: user, company, admin
+- User and company can update profile
+- User can enroll to one or many courses
+- User can see list of jobs with filter
+- User can apply jobs
+- User can see applied jobs with filter
+- User can insert documents to apply jobs
+- Company can post jobs
+- Company may see list of job applicants
+- Company can update applicants status
+- User can withdraw from application process
+- Admin can add category
+
 ## Requirement
 - PHP 7.3+
 - [Laravel 8](https://laravel.com/docs/8.x)
